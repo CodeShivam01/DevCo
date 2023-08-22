@@ -1,0 +1,15 @@
+/* font-family: 'Borel', cursive;
+font-family: 'Poppins', sans-serif;
+font-family: 'Rubik', sans-serif;
+font-family: 'Work Sans', sans-serif; */
+
+@import url('https://fonts.googleapis.com/css2?family=Borel&family=Poppins:wght@600&family=Rubik:wght@400;500;600;700;800;900&family=Work+Sans:ital,wght@1,300&display=swap');
+
+
+.App{
+  min-height: 150vh;
+  display: flex;
+  background: #0091ff;
+  background-size: cover;
+  background-position: center;
+}
