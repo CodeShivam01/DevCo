@@ -7,16 +7,76 @@ import {
   InputGroup,
   InputRightElement,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
+
+
 
 const Login = () => {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const toast = useToast();
+  const [loading, setLoading] = useState('');
+  const navigate = useNavigate();
+
+
+
+
 
   const handleClick = () => setShow(!show);
-  const submitHandler = () => {
-    // Add your login logic here using the email and password state values
+  
+  const submitHandler = async () => {
+     setLoading(true);
+     if (!email || !password ) {
+       toast({
+         title: "Please Fill all the Feilds",
+         status: "warning",
+         duration: 5000,
+         isClosable: true,
+         position: "bottom",
+       });
+       setLoading(false);
+       return;
+     }
+     
+     try {
+       const config = {
+         headers: {
+           "Content-type": "application/json",
+         },
+       };
+       const { data } = await axios.post(
+         "/api/user/login",
+         { email, password },
+         config
+         );
+         console.log("api workin");
+       toast({
+         title: "Login Successful",
+         status: "success",
+         duration: 5000,
+         isClosable: true,
+         position: "bottom",
+       });
+       localStorage.setItem("userInfo", JSON.stringify(data));
+       setLoading(false);
+       navigate("/chats");
+     } catch (error) {
+       console.error("Error:", error);
+       toast({
+         title: "Login Failed",
+         description: "There was an error during Login.",
+         status: "error",
+         duration: 5000,
+         isClosable: true,
+         position: "bottom",
+       });
+       setLoading(false);
+     } 
   };
 
   const setGuestCredentials = () => {
@@ -56,6 +116,7 @@ const Login = () => {
         width={"100%"}
         style={{ margin: 15 }}
         onClick={submitHandler}
+        isLoading={loading}
       >
         Log In
       </Button>
@@ -85,85 +146,3 @@ export default Login;
 
 
 
-
-
-
-
-
-
-
-// import React, { useState } from "react";
-// import {
-//   Button,
-//   FormControl,
-//   FormLabel,
-//   Input,
-//   InputGroup,
-//   InputRightElement,
-//   VStack,
-// } from "@chakra-ui/react";
-
-// const Login = () => {
-
-//     const [show, setShow] = useState(false);
-//     const [email, setEmail] = useState();
-//     const [password, setPassword] = useState();
-
-//     const handleClick = () => setShow(!show);
-//     const submitHandler = () => {};
-
-//     return (
-//       <VStack>
-
-//         <FormControl id="email" isRequired>
-//           <FormLabel>Email</FormLabel>
-//                 <Input
-//                     value={''}
-//             placeholder="Email"
-//             onChange={(e) => setEmail(e.target.value)}
-//           />
-//         </FormControl>
-//         <FormControl id="password" isRequired>
-//           <FormLabel>Password</FormLabel>
-//           <InputGroup>
-//                     <Input
-//                         value={''}
-//               placeholder="Password"
-//               type={show ? "text" : "password"}
-//               onChange={(e) => setPassword(e.target.value)}
-//             />
-//             <InputRightElement width={"4.5rem"}>
-//               <Button h={"1.75rem"} size={"sm"} onClick={handleClick}>
-//                 {show ? "hide" : "show"}
-//               </Button>
-//             </InputRightElement>
-//           </InputGroup>
-//         </FormControl>
-
-//           <Button
-//             colorScheme="blue"
-//             width={"100%"}
-//             style={{ margin: 15 }}
-//             onClick={submitHandler}
-//           >
-//             Log In
-//           </Button>
-//             <Button
-//                 variant={"solid"}
-//             colorScheme="red"
-//             width={"100%"}
-//             style={{ margin: 5 }}
-//                 onClick={() => {
-//                     setEmail("guest@guest.com");
-//                     setPassword("guest123");
-//                     console.log('click');
-//                 }
-//             }
-//           >
-//             Get Guest User Credentials
-//           </Button>
-//       </VStack>
-//     );
-// }
-
-// export default Login

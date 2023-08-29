@@ -1,7 +1,20 @@
 import React , {useState} from 'react'
-import { useToast } from "@chakra-ui/react";
 import axios from 'axios';
-import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputRightElement,
+  VStack,
+  useToast,
+} from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+
+
+
+
 
 
 
@@ -14,7 +27,8 @@ const Signup = () => {
     const [password, setPassword] = useState();
     const [confirmpassword, setConfirmpassword] = useState();
     const [pic, setPic] = useState();
-    const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState();
+  const navigate = useNavigate();
 
   
 
@@ -65,7 +79,7 @@ const Signup = () => {
           return;
         }
     }
-  const submitHandler = () => {
+  const submitHandler = async () => {
     setLoading(true);
     if (!name || !email || !password || !confirmpassword) {
       toast({
@@ -91,10 +105,10 @@ const Signup = () => {
     try {
       const config = {
         headers: {
-          "Content-type": "application/json",
+          "Content-type":"application/json",
         },
       };
-      const { data } = await axios.post("/api/user", { name, email, password, pic },
+      const { data } = await axios.post("/api/user/signup", { name, email, password, pic },
         config);
       toast({
         title: "Registration Successful",
@@ -103,6 +117,9 @@ const Signup = () => {
         isClosable: true,
         position: "bottom",
       });
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      setLoading(false);
+      navigate("/chats");
     } catch (error) {
       console.error("Error:", error);
       toast({
@@ -113,9 +130,8 @@ const Signup = () => {
         isClosable: true,
         position: "bottom",
       });
-    } finally {
       setLoading(false);
-    };
+    } 
   };
 
   return (
