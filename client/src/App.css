@@ -7,7 +7,7 @@ font-family: 'Work Sans', sans-serif; */
 
 
 .App{
-  min-height: 150vh;
+  min-block-size: 150vh;
   display: flex;
   background: #0091ff;
   background-size: cover;
