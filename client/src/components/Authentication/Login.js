@@ -20,7 +20,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const toast = useToast();
-  const [loading, setLoading] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
 
@@ -32,15 +32,15 @@ const Login = () => {
   const submitHandler = async () => {
     setLoading(true);
     console.log("login button working");
-     if (!email || !password ) {
-       toast({
-         title: "Please Fill all the Fields",
+    if (!email || !password ) {
+      console.log("login  working");
+      toast({
+        title: "Please Fill all the Fields",
          status: "warning",
          duration: 5000,
          isClosable: true,
          position: "bottom",
        });
-       setLoading(false);
        return;
      }
      
@@ -64,10 +64,10 @@ const Login = () => {
          position: "bottom",
        });
        localStorage.setItem("userInfo", JSON.stringify(data));
-       setLoading(false);
        navigate("/chats");
      } catch (error) {
        console.error("Error:", error);
+       console.log(error.response.data)
        toast({
          title: "Login Failed",
          description: "There was an error during Login.",
@@ -76,7 +76,6 @@ const Login = () => {
          isClosable: true,
          position: "bottom",
        });
-       setLoading(false);
      } 
   };
 

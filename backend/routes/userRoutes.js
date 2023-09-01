@@ -10,7 +10,7 @@ const {protect} = require("../middleware/authMiddleware")
 
 const router = express.Router()
 
-router.route('/signup').post(registerUser).get(protect,allUsers);
+router.route('/signup').post(registerUser);
 router.route('/').get(protect,allUsers);
 router.post("/login", authUser);
 // router.route("/search").get(allUsers);

@@ -22,20 +22,20 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already exists");
   }
 
-  const user = await User.create({
+  const users = await User.create({
     name,
     email,
     password,
     pic,
   });
 
-  if (user) {
+  if (users) {
     res.status(201).json({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      pic: user.pic,
-      token: generateToken(user.id),
+      id: users.id,
+      name: users.name,
+      email: users.email,
+      pic: users.pic,
+      token: generateToken(users.id),
     });
   } else {
     res.status(400);
@@ -46,15 +46,15 @@ const registerUser = asyncHandler(async (req, res) => {
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const users = await User.findOne({ email });
 
-  if (user && (await user.matchPassword(password))) {
+  if (users && (await users.matchPassword(password))) {
     res.json({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      pic: user.pic,
-      token: generateToken(user.id),
+      id: users.id,
+      name: users.name,
+      email: users.email,
+      pic: users.pic,
+      token: generateToken(users.id),
     });
   } else {
     res.status(400);
@@ -80,7 +80,7 @@ const allUsers = asyncHandler( async (req, res) => {
  console.log("Received request with search keyword:", keyword);
 console.log("Received search query:", req.query.search);
 
-  const users = await User.find(keyword).find({ id: { $ne: req.user.id } });
+  const users = await User.find(keyword).find({ _id: { $ne: req.user.id } });
   // const users = await User.find(keyword);
     // console.log("Authenticated user ID:", req.user._id);
   res.send(users);
